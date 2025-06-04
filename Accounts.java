@@ -84,11 +84,7 @@ public class Accounts {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                return false;
-            }else{
-                return true;
-            }
+            return resultSet.next(); // true if account exists
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
