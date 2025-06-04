@@ -58,6 +58,18 @@ Compile your Java classes and run the main application class.
 
 ---
 
+## Snapshots
+
+![main_menu](media/main_menu)
+![register](media/register)
+![login](media/login)
+![open account](media/open_account)
+![credit money](media/credit_money)
+![debit money](media/debit_money)
+![transfer_money](media/transfer_money)
+![check balance](media/check_balance)
+![exit](media/exit)
+
 ## Future Improvements
 
 - Implement password hashing for secure authentication.
