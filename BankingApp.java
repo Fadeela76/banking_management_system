@@ -1,24 +1,30 @@
+// banking_management_system using Java OOPs, JDBC, and MySQL
 package BankingManagementSystem;
 
 import java.sql.*;
 import java.util.Scanner;
 
-import static java.lang.Class.forName;
-
 public class BankingApp {
+    // Database connection details
     private static final String url = "jdbc:mysql://localhost:3306/banking_management_system";
     private static final String username = "root";
     private static final String password = "Watermelon1@";
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        try{
+        try {
+            // Load MySQL JDBC Driver
             Class.forName("com.mysql.cj.jdbc.Driver");
-        }catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
-        try{
-            Connection connection = DriverManager.getConnection(url, username, password);
-            Scanner scanner =  new Scanner(System.in);
+
+
+        Scanner scanner = new Scanner(System.in);
+        // Establish database connection
+        Connection connection = DriverManager.getConnection(url, username, password);
+
+        try {
+            // Create instances of supporting classes
             User user = new User(connection, scanner);
             Accounts accounts = new Accounts(connection, scanner);
             AccountManager accountManager = new AccountManager(connection, scanner);
@@ -26,38 +32,49 @@ public class BankingApp {
             String email;
             long account_number;
 
-            while(true){
+            // Main menu loop
+            while (true) {
                 System.out.println("*** WELCOME TO BANKING MANAGEMENT SYSTEM ***");
                 System.out.println();
                 System.out.println("1. Register");
                 System.out.println("2. Login");
                 System.out.println("3. Exit");
-                System.out.println("Enter your choice: ");
+                System.out.print("Enter your choice: ");
                 int choice1 = scanner.nextInt();
-                switch (choice1){
+
+                switch (choice1) {
                     case 1:
+                        // User registration
                         user.register();
                         break;
+
                     case 2:
+                        // User login
                         email = user.login();
-                        if(email!=null){
+                        if (email != null) {
                             System.out.println();
                             System.out.println("User Logged In!");
-                            if(accounts.account_exist(email)){
+
+                            // Check if account does NOT exist
+                            if (!accounts.account_exist(email)) {
                                 System.out.println();
                                 System.out.println("1. Open a new Bank Account");
                                 System.out.println("2. Exit");
-                                if(scanner.nextInt() == 1) {
+                                if (scanner.nextInt() == 1) {
                                     account_number = accounts.open_account(email);
                                     System.out.println("Account Created Successfully");
                                     System.out.println("Your Account Number is: " + account_number);
-                                }else{
+                                } else {
                                     break;
                                 }
-
+                            } else {
+                                account_number = accounts.getAccount_number(email);
                             }
+
+                            // Retrieve account number and display logged-in menu
                             account_number = accounts.getAccount_number(email);
                             int choice2 = 0;
+
                             while (choice2 != 5) {
                                 System.out.println();
                                 System.out.println("1. Debit Money");
@@ -65,8 +82,9 @@ public class BankingApp {
                                 System.out.println("3. Transfer Money");
                                 System.out.println("4. Check Balance");
                                 System.out.println("5. Log Out");
-                                System.out.println("Enter your choice: ");
+                                System.out.print("Enter your choice: ");
                                 choice2 = scanner.nextInt();
+
                                 switch (choice2) {
                                     case 1:
                                         accountManager.debit_money(account_number);
@@ -81,6 +99,8 @@ public class BankingApp {
                                         accountManager.getBalance(account_number);
                                         break;
                                     case 5:
+                                        // Log out
+                                        System.out.println("Logging out...");
                                         break;
                                     default:
                                         System.out.println("Enter Valid Choice!");
@@ -88,21 +108,44 @@ public class BankingApp {
                                 }
                             }
 
-                        }
-                        else{
+                        } else {
                             System.out.println("Incorrect Email or Password!");
                         }
+                        break;
+
                     case 3:
+                        // Exit the system
                         System.out.println("THANK YOU FOR USING BANKING SYSTEM!!!");
                         System.out.println("Exiting System!");
                         return;
+
                     default:
                         System.out.println("Enter Valid Choice");
                         break;
                 }
             }
-        }catch (SQLException e){
-            System.out.println(e.getMessage());
+
+        } catch (SQLException e) {
+            System.out.println("Database Error: " + e.getMessage());
+        } finally {
+            if (scanner != null) {
+               try {
+                   scanner.close();
+               } catch (Exception e) {
+                   System.out.println("Error closing scanner: " + e.getMessage());
+               }
+            }
+
+            if (connection != null) {
+                try {
+                    if (!connection.isClosed()) {
+                        connection.close();
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Error closing database connection: " + e.getMessage());
+                }
+            }
         }
+
     }
 }
