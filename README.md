@@ -56,3 +56,12 @@ Update database connection details in your Java code (Connection object initiali
 4. **Compile and run:**<br>
 Compile your Java classes and run the main application class.
 
+---
+
+## Future Improvements
+
+- Implement password hashing for secure authentication.
+- Add transaction management with deposit, withdrawal, and transfer features.
+- Create a graphical or web-based user interface for better UX.
+- Improve validation and error handling.
+- Add unit tests for code reliability.
