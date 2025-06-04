@@ -39,3 +39,20 @@ A simple (vanilla) Java-based Banking Management System that allows users to reg
 
 ---
 
+## Getting Started
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/Fadeela76/banking_management_system.git
+   cd banking_management_system
+   
+2. **Set up MySQL Database:**
+Create a database and required tables (User, Accounts) as per your project schema.
+
+3. **Configure database connection:**
+Update database connection details in your Java code (Connection object initialization) to match your MySQL setup (host, port, username, password, database).
+
+4. **Compile and run:**
+Compile your Java classes and run the main application class.
+
