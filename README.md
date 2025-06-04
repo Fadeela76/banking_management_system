@@ -60,15 +60,15 @@ Compile your Java classes and run the main application class.
 
 ## Snapshots
 
-![main_menu](media/main_menu)
-![register](media/register)
-![login](media/login)
-![open account](media/open_account)
-![credit money](media/credit_money)
-![debit money](media/debit_money)
-![transfer_money](media/transfer_money)
-![check balance](media/check_balance)
-![exit](media/exit)
+![main_menu](media/main_menu.png)
+![register](media/register.png)
+![login](media/login.png)
+![open account](media/open_account.png)
+![credit money](media/credit_money.png)
+![debit money](media/debit_money.png)
+![transfer_money](media/transfer_money.png)
+![check balance](media/check_balance.png)
+![exit](media/exit.png)
 
 ## Future Improvements
 
