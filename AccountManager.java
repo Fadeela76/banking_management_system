@@ -6,12 +6,14 @@ import java.util.Scanner;
 public class AccountManager {
     private Connection connection;
     private Scanner scanner;
+
+    // Constructor to initialize connection and scanner
     AccountManager(Connection connection, Scanner scanner){
         this.connection = connection;
         this.scanner = scanner;
     }
 
-
+    // Method to credit money into a user's account
     public void credit_money(long account_number)throws SQLException {
         scanner.nextLine();
         System.out.print("Enter Amount: ");
@@ -21,14 +23,17 @@ public class AccountManager {
         String security_pin = scanner.nextLine();
 
         try {
-            connection.setAutoCommit(false);
+            connection.setAutoCommit(false); // Start transaction
             if(account_number != 0) {
+
+                // Validate account and security pin
                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Accounts WHERE account_number = ? and security_pin = ? ");
                 preparedStatement.setLong(1, account_number);
                 preparedStatement.setString(2, security_pin);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 if (resultSet.next()) {
+                    // Credit the amount
                     String credit_query = "UPDATE Accounts SET balance = balance + ? WHERE account_number = ?";
                     PreparedStatement preparedStatement1 = connection.prepareStatement(credit_query);
                     preparedStatement1.setDouble(1, amount);
@@ -41,8 +46,8 @@ public class AccountManager {
                         return;
                     } else {
                         System.out.println("Transaction Failed!");
-                        connection.rollback();
-                        connection.setAutoCommit(true);
+                        connection.rollback();  // Rollback on error
+                        connection.setAutoCommit(true);  // Restore auto-commit mode
                     }
                 }else{
                     System.out.println("Invalid Security Pin!");
@@ -54,6 +59,7 @@ public class AccountManager {
         connection.setAutoCommit(true);
     }
 
+    // Method to debit money from a user's account
     public void debit_money(long account_number) throws SQLException {
         scanner.nextLine();
         System.out.print("Enter Amount: ");
@@ -62,8 +68,9 @@ public class AccountManager {
         System.out.print("Enter Security Pin: ");
         String security_pin = scanner.nextLine();
         try {
-            connection.setAutoCommit(false);
+            connection.setAutoCommit(false);  // Start transaction
             if(account_number!=0) {
+                // Validate account and security pin
                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Accounts WHERE account_number = ? and security_pin = ? ");
                 preparedStatement.setLong(1, account_number);
                 preparedStatement.setString(2, security_pin);
@@ -71,6 +78,7 @@ public class AccountManager {
 
                 if (resultSet.next()) {
                     double current_balance = resultSet.getDouble("balance");
+                    // Debit the amount
                     if (amount<=current_balance){
                         String debit_query = "UPDATE Accounts SET balance = balance - ? WHERE account_number = ?";
                         PreparedStatement preparedStatement1 = connection.prepareStatement(debit_query);
@@ -100,6 +108,7 @@ public class AccountManager {
         connection.setAutoCommit(true);
     }
 
+    // Method to transfer money from sender to receiver
     public void transfer_money(long sender_account_number) throws SQLException {
         scanner.nextLine();
         System.out.print("Enter Receiver Account Number: ");
@@ -110,8 +119,10 @@ public class AccountManager {
         System.out.print("Enter Security Pin: ");
         String security_pin = scanner.nextLine();
         try{
-            connection.setAutoCommit(false);
+            connection.setAutoCommit(false);  // Start transaction
             if(sender_account_number!=0 && receiver_account_number!=0){
+
+                // Validate sender's account and security pin
                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Accounts WHERE account_number = ? AND security_pin = ? ");
                 preparedStatement.setLong(1, sender_account_number);
                 preparedStatement.setString(2, security_pin);
@@ -119,6 +130,8 @@ public class AccountManager {
 
                 if (resultSet.next()) {
                     double current_balance = resultSet.getDouble("balance");
+
+                    // Prepare debit and credit queries
                     if (amount<=current_balance){
 
                         // Write debit and credit queries
@@ -162,6 +175,7 @@ public class AccountManager {
         connection.setAutoCommit(true);
     }
 
+    // Method to check the balance of an account
     public void getBalance(long account_number){
         scanner.nextLine();
         System.out.print("Enter Security Pin: ");
