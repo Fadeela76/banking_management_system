@@ -65,3 +65,6 @@ Compile your Java classes and run the main application class.
 - Create a graphical or web-based user interface for better UX.
 - Improve validation and error handling.
 - Add unit tests for code reliability.
+
+## Author
+Fadeela Naqash
